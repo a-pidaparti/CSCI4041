@@ -4,7 +4,7 @@ def minIndex(listA):
     if len(listA) <= 1:
         return None
     ind = 0;
-    for i in range(1, len(listA) - 1):
+    for i in range(1, len(listA)):
         if listA[ind] > listA[i]:
             ind = i
     return ind
@@ -13,7 +13,7 @@ def maxIndex(listA):
     if len(listA) <= 1:
         return None
     ind = 0
-    for i in range(1, len(listA) - 1):
+    for i in range(1, len(listA)):
         if listA[i] > listA[ind]:
             ind = i
     return ind
