@@ -17,11 +17,11 @@ merge_sort_first = False
 #Returns the index where the pivot is located
 
 def partition(A,p,r):
-    pivot = len(A[len(A) - 1].sender)
+    pivot = len(A[r].sender)
     split = p - 1
     cur = p
     for cur in range(p,r):
-        if len(A[cur].sender) < pivot:
+        if len(A[cur].sender) > pivot:
             split += 1
             key = A[cur]
             A[cur] = A[split]
@@ -40,29 +40,78 @@ def quicksort(A,p,r):
         quicksort(A, p, split - 1)
         quicksort(A, split + 1, r)
 
-def merge(A, startL, endL, endR):
-    largest = len(A[endL - 1].sender) + len(A[endR - 1].sender)
-    L = A[startL:endL]
-    R = A[endL + 1:endR]
-    L = L + ["a" * largest]
-    R = R + ["a" * largest]
+def merge1(A, startL, endL, endR):
+    # largest = len(A[endL - 1].sender) + len(A[endR - 1].sender) * 5
+    # L = A[startL:endL]
+    # R = A[endL + 1:endR]
+    # L = L + ["a" * largest]
+    # R = R + ["a" * largest]
+    # r = 0
+    # l = 0
+    # for k in range(0, endR):
+    #     if len(L[l]) >= len(R[r]):
+    #         A[k] = R[r]
+    #         r += 1
+    #     else:
+    #         A[k] = L[l]
+    #         l += 1
+    if len(A[startL:endR]) == 1:
+        R = [A[1]]
+        L = [A[0]]
+    else:
+        R = A[startL:endL + 1]
+        L = A[endL + 1: endR + 1]
     r = 0
     l = 0
-    for k in range(0, endR):
-        if len(L[l]) >= len(R[r]):
-            A[k] = R[r]
+    while l < len(L) and r < len(R):
+        if len(L[l].sender) <= len(R[r].sender):
+            A[l + r] = R[r]
             r += 1
+
         else:
-            A[k] = L[l]
+            A[l + r] = L[l]
             l += 1
+    if l == len(L):
+        A += R[r:]
+    else:
+        A[l + r:] = L[l:]
+
+def merge(A, startL, endL, endR):
+    numL = endL - startL + 1
+    numR = endR - endL
+    L = []
+    R = []
+    for i in range(0,numL):
+        L.append(A[startL + i])
+    for j in range(0, numR):
+        R.append(A[endL + j + 1])
+    i = 0
+    j = 0
+    smol = Email("","")
+    L.append(smol)
+    R.append(smol)
+    print(startL)
+    for k in range(startL, endR + 1):
+        if len(L[i].sender) < len(R[j].sender):
+            A[k] = R[j]
+            j += 1
+            print("added right")
+            print(A)
+        else:
+            A[k] = L[i]
+            i += 1
+            print("added left")
+            print(A)
 
 
 def merge_sort(A, startL, endR):
     if startL < endR:
         endL = int((startL + endR)/2)
         merge_sort(A, startL, endL)
-        merge_sort(A, endL+1, endR)
+        merge_sort(A, endL + 1, endR)
         merge(A, startL, endL, endR)
+
+
 
 
 #DO NOT CHANGE ANYTHING BELOW THIS LINE
@@ -154,51 +203,47 @@ correctq = [[],
             [e6,e4,e5,e1,e7,e8,e2]]
 
 #Run test cases, check whether sorted list correct
-# count = 0
-#
-# try:
-#     if merge_sort_first:
-#         for i in range(len(tests)):
-#             print("TEST #"+str(i+1))
-#             print("Running: merge_sort_wrapper(",tests[i],")\n")
-#             merge_sort_wrapper(tests[i])
-#             print("Expected:",correct[i],"\n\nGot:",tests[i])
-#             assert correct[i] == tests[i],"List sorted incorrectly"
-#             count=count+1
-#             print("\n---------------------------------------\n")
-#         for i in range(len(tests)):
-#             print("TEST #"+str(i+7))
-#             print("Running: quicksort_wrapper(",testsq[i],")\n")
-#             quicksort_wrapper(testsq[i])
-#             print("Expected:",correctq[i],"\n\nGot:",testsq[i])
-#             assert correctq[i] == testsq[i],"List sorted incorrectly"
-#             count=count+1
-#             print("\n---------------------------------------\n")
-#     else:
-#         for i in range(len(tests)):
-#             print("TEST #"+str(i+1))
-#             print("Running: quicksort_wrapper(",testsq[i],")\n")
-#             quicksort_wrapper(testsq[i])
-#             print("Expected:",correctq[i],"\n\nGot:",testsq[i])
-#             assert correctq[i] == testsq[i],"List sorted incorrectly"
-#             count=count+1
-#             print("\n---------------------------------------\n")
-#         for i in range(len(tests)):
-#             print("TEST #"+str(i+7))
-#             print("Running: merge_sort_wrapper(",tests[i],")\n")
-#             merge_sort_wrapper(tests[i])
-#             print("Expected:",correct[i],"\n\nGot:",tests[i])
-#             assert correct[i] == tests[i],"List sorted incorrectly"
-#             count=count+1
-#             print("\n---------------------------------------\n")
-# except AssertionError as e:
-#     print("\nFAIL: ",e)
-# except Exception:
-#     print("\nFAIL: ",traceback.format_exc())
-#
-#
-# print(count,"out of",len(tests+testsq),"tests passed.")
+count = 0
 
-quicksort(inbox5,0, len(inbox5) - 1)
-for i in inbox5:
-    print (i)
+try:
+    if merge_sort_first:
+        for i in range(len(tests)):
+            print("TEST #"+str(i+1))
+            print("Running: merge_sort_wrapper(",tests[i],")\n")
+            merge_sort_wrapper(tests[i])
+            print("Expected:",correct[i],"\n\nGot:",tests[i])
+            assert correct[i] == tests[i],"List sorted incorrectly"
+            count=count+1
+            print("\n---------------------------------------\n")
+        for i in range(len(tests)):
+            print("TEST #"+str(i+7))
+            print("Running: quicksort_wrapper(",testsq[i],")\n")
+            quicksort_wrapper(testsq[i])
+            print("Expected:",correctq[i],"\n\nGot:",testsq[i])
+            assert correctq[i] == testsq[i],"List sorted incorrectly"
+            count=count+1
+            print("\n---------------------------------------\n")
+    else:
+        for i in range(len(tests)):
+            print("TEST #"+str(i+1))
+            print("Running: quicksort_wrapper(",testsq[i],")\n")
+            quicksort_wrapper(testsq[i])
+            print("Expected:",correctq[i],"\n\nGot:",testsq[i])
+            assert correctq[i] == testsq[i],"List sorted incorrectly"
+            count=count+1
+            print("\n---------------------------------------\n")
+        for i in range(len(tests)):
+            print("TEST #"+str(i+7))
+            print("Running: merge_sort_wrapper(",tests[i],")\n")
+            merge_sort_wrapper(tests[i])
+            print("Expected:",correct[i],"\n\nGot:",tests[i])
+            assert correct[i] == tests[i],"List sorted incorrectly"
+            count=count+1
+            print("\n---------------------------------------\n")
+except AssertionError as e:
+    print("\nFAIL: ",e)
+except Exception:
+    print("\nFAIL: ",traceback.format_exc())
+
+
+print(count,"out of",len(tests+testsq),"tests passed.")
