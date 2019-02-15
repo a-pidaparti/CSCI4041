@@ -40,42 +40,6 @@ def quicksort(A,p,r):
         quicksort(A, p, split - 1)
         quicksort(A, split + 1, r)
 
-def merge1(A, startL, endL, endR):
-    # largest = len(A[endL - 1].sender) + len(A[endR - 1].sender) * 5
-    # L = A[startL:endL]
-    # R = A[endL + 1:endR]
-    # L = L + ["a" * largest]
-    # R = R + ["a" * largest]
-    # r = 0
-    # l = 0
-    # for k in range(0, endR):
-    #     if len(L[l]) >= len(R[r]):
-    #         A[k] = R[r]
-    #         r += 1
-    #     else:
-    #         A[k] = L[l]
-    #         l += 1
-    if len(A[startL:endR]) == 1:
-        R = [A[1]]
-        L = [A[0]]
-    else:
-        R = A[startL:endL + 1]
-        L = A[endL + 1: endR + 1]
-    r = 0
-    l = 0
-    while l < len(L) and r < len(R):
-        if len(L[l].sender) <= len(R[r].sender):
-            A[l + r] = R[r]
-            r += 1
-
-        else:
-            A[l + r] = L[l]
-            l += 1
-    if l == len(L):
-        A += R[r:]
-    else:
-        A[l + r:] = L[l:]
-
 def merge(A, startL, endL, endR):
     numL = endL - startL + 1
     numR = endR - endL
