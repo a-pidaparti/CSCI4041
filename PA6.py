@@ -46,7 +46,6 @@ def database_search(database,field,value):
 #Removes all Robots with a matching value in the given field from the database
 #This will require removing them from all three tables.
 def database_delete(database,field,value):
-    print(database)
     hash = hash_function(value)
     newList = []
     if field == "name":
