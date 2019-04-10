@@ -5,7 +5,7 @@ import traceback
 # of the string and encodes it, returning a String of 0s and 1s.
 # This is not an actual Python binary string, just a normal String
 # that happens to contain only 0s and 1s.
-def sortList(nodeList):     #basic counting sort based on frequency of characters
+def sortList(nodeList):     #basic insertion sort based on frequency of characters
 
     for i in range(1, len(nodeList)):
 
